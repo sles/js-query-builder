@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>React</h2>
+  <div id="app-react"></div>
+  <hr />
+  <h2>Vue</h2>
+  <div id="app-vue"></div>
+
+  <template id="app-template">
+    <div v-if="query">
+      <query-item
+        :item="query"
+        :is-root="true"
+        @item-added="addNode"
+        @item-modified="modifyNode"
+        @item-removed="removeNode"
+      ></query-item>
+    </div>
+  </template>
+
+
+  <template id="query-item-template">
+    <div class="query-item">
+      <div v-if="item.rules" class="group-view">
+        <div class="group-controls">
+          {{isRoot}}
+          <select
+            :value="item.combinator"
+            @change="handleModifyItem(item.id, 'combinator', $event)"
+          >
+            <option></option>
+            <option v-for="item in possibleCombinators">{{item}}</option>
+          </select>
+
+          <button
+            @click="handleAddItem(item.id, 'rule')"
+          >
+            +Rule
+          </button>
+
+          <button
+            @click="handleAddItem(item.id, 'group')"
+          >+Group</button>
+
+          <button
+            v-if="!isRoot"
+            @click="handleRemoveItem(item.id)"
+          >
+            &#x2715;
+          </button>
+        </div>
+
+        <query-item
+          v-for="rule in item.rules"
+          :item="rule"
+          @item-added="handleAddItem"
+          @item-modified="handleModifyItem"
+          @item-removed="handleRemoveItem"
+        ></query-item>
+      </div>
+
+      <div v-else>
+        <select
+          :value="item.field"
+          @change="handleModifyItem(item.id, 'field', $event)"
+        >
+          <option></option>
+          <option v-for="item in possibleFields">{{item}}</option>
+        </select>
+
+        <select
+          :value="item.operator"
+          @change="handleModifyItem(item.id, 'operator', $event)"
+        >
+          <option></option>
+          <option v-for="item in possibleOperators">{{item}}</option>
+        </select>
+
+        <input
+          :value="item.value"
+          @change="handleModifyItem(item.id, 'value', $event)"
+        />
+
+        <button @click="handleRemoveItem(item.id)">&#x2715;</button>
+      </div>
+    </div>
+  </template>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/react/16.6.3/umd/react.development.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.6.3/umd/react-dom.production.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js"></script>
+  <script defer src="index.js"></script>
+</body>
+</html>
