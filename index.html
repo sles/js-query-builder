@@ -29,7 +29,6 @@
     <div class="query-item">
       <div v-if="item.rules" class="group-view">
         <div class="group-controls">
-          {{isRoot}}
           <select
             :value="item.combinator"
             @change="handleModifyItem(item.id, 'combinator', $event)"
